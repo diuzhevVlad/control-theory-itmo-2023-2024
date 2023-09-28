@@ -48,6 +48,13 @@
 и подаче нулевого управляющего воздействия (они статичны в 0). При задании начальных условий системы
 ведут себя согласно аналитически предсказанному корневым критерием.
 
+Аналитическое решение поведения системы (при свободном движении):
+\begin{enumerate}
+    \item $y(t) = C_1 + C_2 e^{-t}$
+    \item $y(t) = C_1 + C_2 e^{0.3t}$
+    \item $y(t) = (C_1 \sin{2t} + C_2 \cos{2t}) e^{0.4t}$
+\end{enumerate}
+
 \pagebreak
 
 \section{Область устойчивости}
@@ -111,9 +118,12 @@
 \end{equation*}
 Таким образом, система не имеет зоны устойчивости.
 
+Выполним моделирование систем, заданных следующими тройками параметров $K, T_1, T_2$ (рис. 4): (1,1,1) - устойчиваяя
+, (2,1,1) - на границе устойчивости и (3,2,1) - неустойчивая.
+
 \begin{figure}[]
     \centering
-    \includegraphics[width=\textwidth]{plot_2_1}
+    \includegraphics[width=300px, height=260px]{plot_2_1}
     \caption{\label{fig:The-caption-1}Зона устойчивости при фиксированном $T_2=1$ (задание 2)}
 \end{figure}
 \begin{figure}[]
@@ -124,9 +134,120 @@
 \pagebreak
 
 \section{Автономный генератор}
+Рассмотрим систему вида:
+\begin{equation}
+    \begin{cases}
+        \dot x = A x \\
+        y = C x
+    \end{cases}
+\end{equation}
+Согласно теории однородных дифференциальных уравнений, можем записать решение системы следующим образом:
+\begin{equation}
+    x(t) = e^{At}x(0) \implies y(t) = C e^{At}x(0)
+\end{equation}
+Желаемый вид выходного сигнала согласно условию: $y(t) = -\sin{5t} + e^{-7}\sin{9t}$. Решение такого вида
+достигается при следующем наборе корней характеристического полинома матрицы $A$:\\ $\lambda_1 = 5i, \lambda_2 = -5i
+,\lambda_3 = -7 + 9i,\lambda_4 = -7 - 9i$.
+
+Представим матрицу $A$ в Жордановой нормальной форме (изменим базис состояний). Тогда, можем записать систему $(3)$ в виде:
+\begin{equation}
+    A = TJT^{-1},
+    \begin{cases}
+        \dot x = TJT^{-1}x \\
+        y = C x
+    \end{cases}
+    \implies 
+    \begin{cases}
+        x(t) = Te^{Jt}T^{-1}x(0) = Te^{Jt}\widetilde{x}(0) \\
+        y(t) = C Te^{Jt}T^{-1}x(0) = \widetilde{C}e^{Jt}\widetilde{x}(0)
+    \end{cases},
+    \widetilde{x} = T^{-1}x, \widetilde{C} = CT
+\end{equation}
+\begin{equation*}
+    J = \begin{bmatrix}
+        0 & 5 & 0 & 0   \\
+        -5 & 0 & 0 & 0  \\
+        0 & 0 & -7 & 9 \\
+        0 & 0 & -9 & -7
+        \end{bmatrix},
+    e^{Jt} = \begin{bmatrix}
+        \cos{5t} & \sin{5t} & 0 & 0   \\
+        -\sin{5t} & \cos{5t} & 0 & 0  \\
+        0 & 0 & e^{-7}\cos{9t} & e^{-7}\sin{9t} \\
+        0 & 0 & -e^{-7}\sin{9t} & e^{-7}\cos{9t}
+        \end{bmatrix}
+\end{equation*}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=300px, height=260px]{plot_3_1}
+    \caption{\label{fig:The-caption-1}Выход автономного генератора (задание 3)}
+\end{figure}
+
+Найдем подходящие матрицы $\widetilde{C}$ и $\widetilde{x}(0)$ для получения требуемого выходного сигнала:
+\begin{gather*}
+    y(t) = \widetilde{C}e^{Jt}\widetilde{x}(0) =
+    \begin{bmatrix}
+        \tilde{c}_1 & \tilde{c}_2 & \tilde{c}_3 & \tilde{c}_4 
+    \end{bmatrix} 
+    \begin{bmatrix}
+        \cos{5t} & \sin{5t} & 0 & 0   \\
+        -\sin{5t} & \cos{5t} & 0 & 0  \\
+        0 & 0 & e^{-7}\cos{9t} & e^{-7}\sin{9t} \\
+        0 & 0 & -e^{-7}\sin{9t} & e^{-7}\cos{9t}
+        \end{bmatrix}
+    \begin{bmatrix}
+        \tilde{x}(0)_1\\
+        \tilde{x}(0)_2\\
+        \tilde{x}(0)_3\\
+        \tilde{x}(0)_4
+    \end{bmatrix}
+     = \\ (\tilde{c}_1\tilde{x}(0)_1 + \tilde{c}_2\tilde{x}(0)_2) \cos{5t} +
+    (\tilde{c}_1\tilde{x}(0)_2 - \tilde{c}_2\tilde{x}(0)_1) \sin{5t} + 
+    (\tilde{c}_3\tilde{x}(0)_3 + \tilde{c}_4\tilde{x}(0)_4) e^{-7t}\cos{9t} + \\
+    (\tilde{c}_3\tilde{x}(0)_4 - \tilde{c}_4\tilde{x}(0)_3) e^{-7t}\sin{9t} = 
+    y(t) = -\sin{5t} + e^{-7}\sin{9t} \implies \\
+    \implies
+    \begin{cases}
+        (\tilde{c}_1\tilde{x}(0)_1 + \tilde{c}_2\tilde{x}(0)_2) = 0 \\
+        (\tilde{c}_1\tilde{x}(0)_2 - \tilde{c}_2\tilde{x}(0)_1) = -1 \\
+        (\tilde{c}_3\tilde{x}(0)_3 + \tilde{c}_4\tilde{x}(0)_4) = 0 \\
+        (\tilde{c}_3\tilde{x}(0)_4 - \tilde{c}_4\tilde{x}(0)_3) = 1
+    \end{cases},
+    \begin{cases}
+        \tilde{c}_2 = \tilde{x}(0)_1 = 0 \\
+        \tilde{c}_4 = \tilde{x}(0)_3 = 0 \\
+        \tilde{c}_3 = \tilde{x}(0)_2 = \tilde{x}(0)_4 = 1 \\
+        \tilde{c}_1 = -1
+    \end{cases}
+\end{gather*}
+Таким образом:
+\begin{equation*}
+    \widetilde{C} = \begin{bmatrix}
+        -1 & 0 & 1 & 0
+    \end{bmatrix},
+    \widetilde{x}(0) = \begin{bmatrix}
+        0 & 1 & 0 & 1
+    \end{bmatrix}^T
+\end{equation*}
+Проведем моделирование системы $(5)$, зная матрицы $\widetilde{x}(0)$ и $\widetilde{C}$ (рис. 5). Как видно, 
+выход системы, заданной найденными матрицами идентичен желаемому выходу.
 
 \pagebreak
 
 \section{Изучение канонической управляемой формы: фазовые портреты}
+Рассмотрим систему второго порядка $(1)$ в свободном движении. Возьмем последний набор корней из 1-го задания:
+$\lambda_1 = 0.4 + 2 i$, $\lambda_1 = 0.4 - 2 i$. Данная система неустойчива и при ненулевых начальных условиях
+расходится. Проведем моделирование в форме В-В и в канонической управляемой форме (рис. 6).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{plot_4_1}
+    \caption{\label{fig:The-caption-1}Сравнение фазовых портретов в форме В-В и в канонической
+    управляемой форме (задание 4)}
+\end{figure}
+
+Можем заметить, что фазовые портреты идентичны. 
+\pagebreak
+
+\section{Выводы}
 
 \pagebreak
