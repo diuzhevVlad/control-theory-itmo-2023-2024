@@ -10,5 +10,79 @@
 
 \pagebreak
 
+\section{Исследование типовых звеньев}
+Рассмотрим несколько систем из приведенных заданий. Выведем дифференциальные уравнения, описывающие данные 
+системы и найдем аналитические выражения для временных и частотных характеристик.
+\subsection*{Brushed DC motor 2.0}
+\begin{equation}
+    J \dot{\omega} = M, M = k_m I, I = \frac{U+\varepsilon}{R}, \varepsilon = \varepsilon_i + \varepsilon_s, \varepsilon_i=-k_e \omega, \varepsilon_s=-L\dot{I}.
+\end{equation}
+Путем преобразований можем получить дифференциальное уравнение (апериодическое звено второго порядка):
+\begin{equation*}
+    \ddot{\omega} + \frac{R}{L}\dot{\omega}+\frac{k_mk_e}{JL}\omega = \frac{k_m}{JL}U, W(s)=\frac{k_m}{JLs^2 + JRs + k_mk_e}
+\end{equation*}
+Временные характеристики:
+\begin{equation*}
+    y_{i.r.}=\mathcal{L}^{-1}(W(s)) = \frac{2 k_{m} e^{- \frac{R t}{2 L}} \sin{(\frac{t \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}{2} )} \theta(t)}{J L \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}
+\end{equation*}
+\begin{equation*}
+    y_{s.r.}=\mathcal{L}^{-1}(\frac{1}{s}W(s)) = \frac{\theta(t)}{k_{e}} - \frac{e^{- \frac{R t}{2 L}} \cos{(\frac{t \sqrt{- R^{2} + \frac{4 L k_{e} k_{m}}{J}}}{2 L} )} \theta(t)}{k_{e}} - \frac{R e^{- \frac{R t}{2 L}} \sin{(\frac{t \sqrt{- \frac{R^{2}}{L^{2}} + \frac{4 k_{e} k_{m}}{J L}}}{2} )} \theta(t)}{L k_{e} \sqrt{- \frac{R^{2}}{L^{2}} + \frac{4 k_{e} k_{m}}{J L}}}
+\end{equation*}
+Проведем моделирование системы и сравним с аналитически полученным поведением:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{time_char_2.png}
+    \caption{\label{fig:The-caption-1}Временные характеристики системы 2 (подвариант 7)}
+\end{figure}
 
+Частотные характеристики:
+\begin{equation*}
+    |W(j\omega)| = \frac{\|{k_{m}}\|}{\sqrt{J^{2} L^{2} \omega^{4} + J^{2} R^{2} \omega^{2} - 2 J L k_{e} k_{m} \omega^{2} + k_{e}^{2} k_{m}^{2}}}
+\end{equation*}
+\begin{equation*}
+    Arg(W(j\omega)) = \operatorname{atan}_{2}{(- \frac{J R k_{m} \omega}{J^{2} R^{2} \omega^{2} + (J L \omega^{2} - k_{e} k_{m})^{2}},- \frac{k_{m} (J L \omega^{2} - k_{e} k_{m})}{J^{2} R^{2} \omega^{2} + (J L \omega^{2} - k_{e} k_{m})^{2}} )}
+\end{equation*}
+Воспользуемся функцией $\bold{bode}$ для численного моделирования частотных характеристик:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{freq_char_2.png}
+    \caption{\label{fig:The-caption-1}Частотные характеристики системы 2 (подвариант 7)}
+\end{figure}
+\pagebreak
 
+\subsection*{Конденсируй. Интегрируй. Умножай}
+\begin{equation}
+    I = C\frac{dU}{dt}
+\end{equation}
+Путем преобразований можем получить дифференциальное уравнение (идеальное интегрирующее):
+\begin{equation*}
+    \dot{U}C = I, W(s)=\frac{1}{Cs}
+\end{equation*}
+Временные характеристики:
+\begin{equation*}
+    y_{i.r.}=\mathcal{L}^{-1}(W(s)) = \frac{\theta(t)}{C}
+\end{equation*}
+\begin{equation*}
+    y_{s.r.}=\mathcal{L}^{-1}(\frac{1}{s}W(s)) = \frac{\theta(t)t}{C}
+\end{equation*}
+Проведем моделирование системы и сравним с аналитически полученным поведением:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{time_char_3.png}
+    \caption{\label{fig:The-caption-1}Временные характеристики системы 3 (подвариант 7)}
+\end{figure}
+
+Частотные характеристики:
+\begin{equation*}
+    |W(j\omega)| = \frac{1}{|C\omega|}
+\end{equation*}
+\begin{equation*}
+    Arg(W(j\omega)) = \operatorname{atan}_{2}{(-\frac{1}{C\omega},0)}=-\frac{\pi}{2}
+\end{equation*}
+Воспользуемся функцией $\bold{bode}$ для численного моделирования частотных характеристик:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{freq_char_3.png}
+    \caption{\label{fig:The-caption-1}Частотные характеристики системы 3 (подвариант 7)}
+\end{figure}
+\pagebreak
