@@ -6,6 +6,126 @@
 языке Python и предоставляет широкий функционал для анализа и моделирования систем,
 а также синтеза регуляторов для управления.
 
-Полный листинг моделирования систем представлен в \href{https://github.com/diuzhevVlad/control-theory-itmo-fall-2023/blob/main/Lab4/Lab4.ipynb}{jupyter notebook} на GitHub.
+Полный листинг моделирования систем представлен в \href{https://github.com/diuzhevVlad/control-theory-itmo-fall-2023/blob/main/Lab7/Lab7.ipynb}{jupyter notebook} на GitHub.
 
 \pagebreak
+
+
+\section{Полностью управляемая система}
+Рассмотрим система, заданную матрицами $A$ и $B$:
+\begin{equation*}
+    A = \begin{bmatrix}
+        7 & -7 & 8 \\
+        6 & -5 & 6 \\
+        -6 & 4 & -7
+    \end{bmatrix},
+    B = \begin{bmatrix}
+        -4 \\ -2 \\ 4
+    \end{bmatrix}
+\end{equation*}
+
+\subsection{Матрица управляемости}
+Запишем матрицй управляемости системы:
+\begin{equation*}
+    U = \begin{bmatrix}
+        B & AB & A^2B 
+    \end{bmatrix}
+     = 
+    \begin{bmatrix}
+        -4 & 18 & -40 \\
+        -2 & 10 & -14 \\
+        4 & -12 & 16
+    \end{bmatrix}
+\end{equation*}
+Заметим, что ранг данной матрицы равен 3, следовательно, система - полностью управляема.
+
+\subsection{Жорданова форма}
+Представим систему в Жордановом базисе:
+\begin{equation}
+    \begin{cases}
+        \dot{\hat{x}} = P^{-1}AP\hat{x} + P^{-1}Bu  \\
+        y = CP\hat{x}
+    \end{cases}
+\end{equation}
+где $P$ - матрица обобщенных векторов. ЖНФ матрицы $A$:
+\begin{equation*}
+    A = PJP^{-1} = \begin{bmatrix}
+        -1 & -\frac{3}{2} + \frac{i}{2} & -\frac{3}{2}-\frac{i}{2} \\
+        0 & -1 & -1 \\
+        1 & 1 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        -1 & 0 & 0 \\
+        0 & -2-3i & 0 \\
+        0 & 0 & -2+3i
+    \end{bmatrix}
+    \begin{bmatrix}
+        -1 & -\frac{3}{2} + \frac{i}{2} & -\frac{3}{2}-\frac{i}{2} \\
+        0 & -1 & -1 \\
+        1 & 1 & 1
+    \end{bmatrix}^{-1}
+\end{equation*}
+Матрица входных воздействий в Жордановом базисе:
+\begin{equation*}
+    P^{-1}B = \begin{bmatrix}
+        2 \\ 1-i \\ 1+i
+    \end{bmatrix}
+\end{equation*}
+Все жордановы клетки матрицы $J$ соответсвуют разным собственным числам и элементы матрицы входных воздействий
+соответствующие концам клеток не равны нулю. Следовательно: все собственные чила - управляемы.
+
+Также, заметим:
+\begin{equation*}
+    \begin{cases}
+        rank(\begin{bmatrix}
+            A - (-1)\cdot I &  B
+        \end{bmatrix} ) = 3 \\
+        rank(\begin{bmatrix}
+            A - (-2-3i)\cdot I &  B
+        \end{bmatrix} ) = 3 \\
+        rank(\begin{bmatrix}
+            A - (-2+3i)\cdot I &  B
+        \end{bmatrix} ) = 3
+    \end{cases}
+\end{equation*}
+что подтверждает управляемость всех собственных чисел.
+
+\subsection{Управляемое подпространство}
+Т.к. система - полностью управляема, управляемое подпространство совпадает с $\mathcal{R}^3$ и любой вектор
+принадлежит ему, в том числе $x_1$:
+\begin{equation*}
+    x_1 = \begin{bmatrix}
+        5 \\
+        3 \\
+        -3
+    \end{bmatrix}
+\end{equation*}
+
+\subsection{Грамиан управляемости}
+Расчитаем грамиан управляемости системы:
+\begin{equation}
+    P(t_1) = \int_{0}^{t_1}e^{At}BB^Te^{A^Tt}dt
+\end{equation}
+\begin{equation*}
+    P(3) = \begin{bmatrix}
+        1.777 & 0.654 & -1.982 \\
+        0.654 & 0.538 & -0.538 \\
+        -1.982 & -0.539 & 2.534
+        \end{bmatrix}
+\end{equation*}
+Собственные числа грамиана:
+\begin{eqnarray*}
+    \lambda_1 = 0.055, \lambda_2 = 0.439, \lambda_3 = 4.355
+\end{eqnarray*}
+
+\subsection{Расчет управления}
+Расчитаем управление, необходимое для перехода из нулевого состояния в состояние $x_1$ за $t_1$ секунд:
+\begin{equation}
+    u(t) = B^Te^{A^T(t_1-t)}(P(t_1))^{-1}x_1
+\end{equation}
+Искомое управление:
+\begin{equation*}
+    u(t) = B^Te^{A^T(3-t)}(P(3))^{-1}x_1 = -9.196e^{t-3} - 32.765e^{2t-6}sin(3t-9)-5.244e^{2t-6}cos(3t-9)
+\end{equation*}
+
+\subsection{Моделирование}
