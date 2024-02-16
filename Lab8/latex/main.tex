@@ -1,0 +1,48 @@
+% LaTeX Template for short student reports.
+% Citations should be in bibtex format and go in references.bib
+\documentclass[a4paper, 11pt]{article}
+\usepackage[top=3cm, bottom=3cm, left = 2cm, right = 2cm]{geometry} 
+\geometry{a4paper} 
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{textcomp}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb}  
+\usepackage{bm}  
+\usepackage[pdftex,bookmarks,colorlinks,breaklinks]{hyperref}  
+%\hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black} % black links, for printed output
+\usepackage{memhfixc} 
+\usepackage{pdfsync}  
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{listings}
+\pagestyle{fancy}
+
+\newcommand{\authorName}{Дюжев Владислав Дмитриевич}
+\newcommand{\workType}{Лабораторная работа №8}
+\newcommand{\workName}{Модальные регуляторы и наблюдатели}
+\newcommand{\groupNumber}{R33353}
+\newcommand{\teacherName}{Пашенко А. В.}
+\newcommand{\placeNyear}{Санкт-Петербург 2023 г.}
+\newcommand{\subjectName}{Теория автоматического управления}
+\newcommand{\variantNum}{8}
+
+\lstset{frame=tb,
+   language=Python,
+   basicstyle=\footnotesize,
+    numbers=left,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=1,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
+\graphicspath{ {./graphics/} }
+
+\begin{document}
+\include{title}
+\include{content}
+\bibliographystyle{abbrv}
+% \bibliography{references}  % need to put bibtex references in references.bib 
+\end{document}
