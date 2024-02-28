@@ -92,6 +92,7 @@
 Для каждого желаемого спектра найдем матрицу $K$ и выполним моделирование системы с 
 входным воздействием $u = Kx$ при начальных условиях $x(0)=[1, 1, 1, 1]^T$.
 
+
 \begin{figure}[]
     \centering
     \includegraphics[width=300px]{plot_1_st_1.png}
@@ -132,6 +133,24 @@
     \includegraphics[width=300px]{plot_1_ct_4.png}
     \caption{\label{fig:The-caption-1}Задание 1. Управляющий сигнал системы со спектром №4}
 \end{figure}
+\pagebreak
+Полученные матрицы $K$:
+\begin{equation*}
+    K_1 = \begin{bmatrix}
+        0 & -0.32 & -0.94 & -1.57
+    \end{bmatrix},
+    K_2 = \begin{bmatrix}
+        0 & -1468.81 & -849.87 & 1187.67
+    \end{bmatrix},
+\end{equation*}
+\begin{equation*}
+    K_3 = \begin{bmatrix}
+        0 & -2.82 & -3.46 & -0.65
+    \end{bmatrix},
+    K_4 = \begin{bmatrix}
+        0 & -5.78 & -8.21 & 0.82
+    \end{bmatrix}
+\end{equation*}
 \pagebreak
 
 \section{Модальный наблюдатель}
@@ -183,6 +202,23 @@
 Для каждого желаемого спектра найдем матрицу $L$ и выполним моделирование при начальных
 условиях $x(0)=[1, 1, 1, 1]^T$, $\hat x(0)=[2, 0, 0, -1]^T$.
 
+Полученные матрицы $L$:
+\begin{equation*}
+    L_1 = \begin{bmatrix}
+        -2 & 0.58 & -0.16 & 0
+    \end{bmatrix}^T,
+    L_2 = \begin{bmatrix}
+        6881.31 & -204.35 & 3657.96 & -4657.88
+    \end{bmatrix}^T,
+\end{equation*}
+\begin{equation*}
+    L_3 = \begin{bmatrix}
+        4.81 & 0.14 & 5.63 & -6.88
+    \end{bmatrix}^T,
+    L_4 = \begin{bmatrix}
+        11.37 & -12.04 & 6.25 & -13.25
+    \end{bmatrix}^T
+\end{equation*}
 \begin{figure}[]
     \centering
     \includegraphics[width=300px]{plot_2_st_1.png}
@@ -292,7 +328,20 @@
     \end{bmatrix}
 \end{equation}
 
-Вполним моделирование данной системы.
+Найденные матрицы $K$ и $L$:
+\begin{equation*}
+    K = \begin{bmatrix}
+        112.31 & -118.41 & 36.03 & 29.74
+    \end{bmatrix},
+    L =\begin{bmatrix}
+        164.55 & 164.55 \\
+        -171.64 & -171.64 \\
+        -56.73 & -56.73 \\
+        -63,82 & -63.82
+    \end{bmatrix}
+\end{equation*}
+
+Выполним моделирование данной системы при начальных условиях: $x(0) = [-1,-1,-1,-1]^T$, $\hat x (0) = [1,1,1,1]^T$.
 \begin{figure}[]
     \centering
     \includegraphics[width=300px]{plot_3_st.png}
