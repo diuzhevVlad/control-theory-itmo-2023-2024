@@ -1,0 +1,149 @@
+\tableofcontents
+
+\pagebreak
+
+\section{Построение математической модели объекта}
+\subsection{Вывод уравнений}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=300px]{pendulum.png}
+    \caption{\label{fig:task1_1}Перевернутый маятник на тележке.}
+\end{figure}
+
+Рассмотрим систему перевернутого маятника на тележке (рис. \ref{fig:task1_1}). Введем следущие обозначения физических величин:
+\begin{itemize}
+    \item $a$ -- линейная координата тележки;
+    \item $\dot{a}$ -- линейная скорость тележки;
+    \item $\varphi$ -- угол отклонения маятника от вертикали;
+    \item $\dot{\varphi}$ -- угловая скорость маятника;
+    \item $f$ -- вращающий внешний момент, действующий на маятник;
+    \item $u$ -- сила действующая на тележку;
+    \item $M, m$ --  массы тележки и маятника соответственно;
+    \item $l$ -- длина маятника.
+\end{itemize}
+
+В качестве вектора состояния $x = \begin{bmatrix}
+    x_1 & x_2 & x_3 & x_4
+\end{bmatrix}^T$ выберем набор $a, \dot{a}, \varphi, \dot{\varphi}$. В роли управляющего воздействия примем $u$, в роли внешнего возмущения -- $f$.
+Измеряемыми сигналами $y = \begin{bmatrix}
+    y_1 & y_2
+\end{bmatrix}^T$ будем считать $a$ и $\varphi$.
+\begin{equation} \label{eq:1}
+    \begin{cases}
+        x_1 = a \\ x_2 = \dot{a} \\ x_3 = \varphi \\ x_4 = \dot{\varphi} \\ y_1 = a \\ y_2 = \varphi
+    \end{cases}
+\end{equation}
+
+Для вывода математической модели данной физической системы воспользуемся уравнениями Лагранжа:
+\begin{equation} \label{eq:2}
+    \begin{cases}
+        \frac{d}{dt}\frac{\partial T}{\partial \dot{a}} - \frac{\partial T}{\partial a} = u \\
+        \frac{d}{dt}\frac{\partial T}{\partial \dot{\varphi}} - \frac{\partial T}{\partial \varphi} = f + mgl\sin(\varphi)
+    \end{cases},
+\end{equation}
+где $T$ -- кинетическая энергия системы.
+\begin{equation} \label{eq:3}
+    T(t) = M\frac{\dot{a}^2}{2} + m\frac{(\frac{d}{dt}(l\cos(\varphi)))^2 + (-\frac{d}{dt}(l\sin(\varphi)) + \dot{a})^2}{2}=
+    (M+m)\frac{\dot{a}^2}{2} + \frac{ml^2\dot{\varphi}^2}{2} - ml\cos(\varphi)\dot{a}\dot{\varphi}
+\end{equation}
+Подставив выражение для $T$ в уравнения \ref{eq:2}, получим уравнения математической модели системы:
+\begin{equation} \label{eq:4}
+    \begin{cases}
+        (M+m)\ddot{a} + ml(\sin(\varphi)\dot{\varphi}^2 - \cos(\varphi)\ddot{\varphi}) = u \\
+        ml^2\ddot{\varphi} - ml\ddot{a}\cos{\varphi} = f + mgl\sin(\varphi)
+    \end{cases}
+\end{equation}
+Тогда, выразив $\ddot{a}$ и $\ddot{\varphi}$:
+\begin{equation} \label{eq:5}
+    \begin{cases}
+        \ddot a = -\frac{ml}{M+m}\sin(\varphi)\dot{\varphi}^2 + \frac{ml}{M+m}\cos(\varphi)\ddot{\varphi} + \frac{1}{M+m}u \\
+        \ddot \varphi = \frac{1}{l}\ddot a \cos(\varphi) + \frac{g}{l}\sin(\varphi) + \frac{1}{ml^2}f
+    \end{cases}
+\end{equation}
+Решив данную систему уравнений \ref{eq:5} относительно $\ddot a$ и $\ddot \varphi$:
+\begin{equation} \label{eq:6}
+    \begin{cases}
+        \ddot a = \frac{1}{M + m\sin(\varphi)^2}( -ml\sin(\varphi)\dot{\varphi}^2 + mg\cos(\varphi)\sin(\varphi) + \frac{\cos(\varphi)}{l}f + u ) \\
+        \ddot \varphi = \frac{1}{M + m\sin(\varphi)^2}( -m\sin(\varphi)\cos(\varphi)\dot{\varphi}^2 + \frac{(M+m)g}{l}\sin(\varphi) + \frac{M+m}{ml^2}f + \frac{\cos(\varphi)}{l}u )
+    \end{cases}
+\end{equation}
+
+Представим математическую модель в терминах вектора состояния:
+\begin{equation} \label{eq:7}
+    \begin{cases}
+        \dot x_1 = x_2 \\
+        \dot x_2 = \frac{1}{M + m\sin(x_3)^2}( -ml\sin(x_3)x_4^2 + mg\cos(x_3)\sin(x_3) + \frac{\cos(x_3)}{l}f + u ) \\
+        \dot x_3 = x_4 \\
+        \dot x_4 = \frac{1}{M + m\sin(x_3)^2}( -m\sin(x_3)\cos(x_3)x_4^2 + \frac{(M+m)g}{l}\sin(x_3) + \frac{M+m}{ml^2}f + \frac{\cos(x_3)}{l}u ) \\
+        y_1 = x_1 \\
+        y_2 = x_3
+    \end{cases}
+\end{equation}
+
+\subsection{Точки равновесия}
+В точках равновесия все компоненты производной вектора состояния по времени равны $0$. Следовательно, полагая $u, f \equiv 0$
+необходимо:
+\begin{equation} \label{eq:8}
+    \begin{cases}
+        x_2 = 0 \\
+        \frac{1}{M + m\sin(x_3)^2}( -ml\sin(x_3)x_4^2 + mg\cos(x_3)\sin(x_3) ) = 0 \\
+        x_4 = 0 \\
+        \frac{1}{M + m\sin(x_3)^2}( -m\sin(x_3)\cos(x_3)x_4^2 + \frac{(M+m)g}{l}\sin(x_3) ) = 0 \\
+    \end{cases}
+\end{equation}
+Учитывая $x_4 = 0$ и $M + m\sin(x_3)^2 > 0$:
+\begin{equation} \label{eq:9}
+    \begin{cases}
+        x_1 \in \mathbb{R} \\
+        x_2 = 0 \\
+        x_3 = \pi n, n \in \mathbb{Z} \\ 
+        x_4 = 0 
+    \end{cases}
+\end{equation}
+Заметим, однако, что с физической точки зрения условие $x_3 = \pi n$ эквивалентно $x_3 = 0$ (верхнее положение маятника) или $x_3 = \pi$ (нижнее положение маятника). В дальнейшем нас будет интересовать стабилизация системы около верхенего положения равновесия.
+
+\subsection{Линеаризация}
+Для линеаризации системы около векхней точки равновесия ($x = \begin{bmatrix}
+    a_0 & 0 & 0 & 0
+\end{bmatrix}^T$) представим некоторые функции от компонент вектора состояния в виде ряда Тейлора в данной точке:
+\begin{equation*}\sin(x_3) = x_3 + \sum_{n=1}^{\infty}(-1)^n\frac{x_3^{2n+1}}{(2n+1)!}\end{equation*}
+\begin{equation*}\cos(x_3) = 1 + \sum_{n=1}^{\infty}(-1)^n\frac{x_3^{2n}}{(2n)!}\end{equation*}
+Приняв величины вектора состояния достаточно малыми ($x_3^2 \ll x_3$, $x_4^2 \ll x_4$), можем записать линеаризованные уравненя динамики системы:
+\begin{equation} \label{eq:10}
+    \begin{cases}
+        \dot x_1 = x_2 \\
+        \dot x_2 = \frac{mg}{M}x_3 + \frac{1}{Ml}f + \frac{1}{M}u \\
+        \dot x_3 = x_4 \\
+        \dot x_4 = \frac{(m+m)g}{Ml}x_3 + \frac{M+m}{Mml^2}f + \frac{1}{Ml}u \\
+    \end{cases}
+\end{equation}
+
+Можем представить линеаризованную систему в матричном виде:
+\begin{equation} \label{eq:11}
+    \begin{cases}
+        \dot x = Ax + Bu + Df \\
+        y = Cx
+    \end{cases},
+\end{equation}
+где матрицы $A$, $B$, $C$, $D$ имеют следующий вид:
+\begin{equation}
+    A = \begin{bmatrix}
+        0 & 1 & 0 & 0 \\
+        0 & 0 & \frac{mg}{M} & 0 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & \frac{(M+m)g}{Ml} & 0
+    \end{bmatrix},
+    B = \begin{bmatrix}
+        0 \\ \frac{1}{M} \\ 0 \\ \frac{1}{Ml}
+    \end{bmatrix},
+    D = \begin{bmatrix}
+        0 \\ \frac{1}{Ml} \\ 0 \\ \frac{M+m}{Mml^2}
+    \end{bmatrix},
+    C = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0
+    \end{bmatrix}
+\end{equation}
+\pagebreak
+
+\section{Анализ математической модели}
