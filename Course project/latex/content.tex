@@ -126,7 +126,7 @@
     \end{cases},
 \end{equation}
 где матрицы $A$, $B$, $C$, $D$ имеют следующий вид:
-\begin{equation}
+\begin{equation*}
     A = \begin{bmatrix}
         0 & 1 & 0 & 0 \\
         0 & 0 & \frac{mg}{M} & 0 \\
@@ -143,7 +143,209 @@
         1 & 0 & 0 & 0 \\
         0 & 0 & 1 & 0
     \end{bmatrix}
-\end{equation}
+\end{equation*}
+
+Выберем значения параметров системы:
+\begin{equation*}
+    M = 10, m = 1, l = 1, g = 9.8
+\end{equation*}
+Тогда, матрицы системы примут следующий вид:
+\begin{equation*}
+    A = \begin{bmatrix}
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 0.98 & 0 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & 10.78 & 0
+    \end{bmatrix},
+    B = \begin{bmatrix}
+        0 \\ 0.1 \\ 0 \\ 0.1
+    \end{bmatrix},
+    D = \begin{bmatrix}
+        0 \\ 0.1 \\ 0 \\ 1.1
+    \end{bmatrix},
+    C = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0
+    \end{bmatrix}
+\end{equation*}
 \pagebreak
 
 \section{Анализ математической модели}
+\subsection{Анализ матриц}
+Найдем собственные числа и собственные вектора матрицы $A$:
+\begin{equation*}
+    \sigma(A) = \{0, 0, 3.28, -3.28\}; \nu(A) = \{\begin{bmatrix}
+        1 \\ 0 \\ 0 \\ 0
+    \end{bmatrix},
+    \begin{bmatrix}
+        -1 \\ 0 \\ 0 \\ 0
+    \end{bmatrix},
+    \begin{bmatrix}
+        0.026 \\ 0.087 \\ 0.29 \\ 0.953
+    \end{bmatrix},
+    \begin{bmatrix}
+        -0.026 \\ 0.087 \\ -0.29 \\ 0.953
+    \end{bmatrix}\}
+\end{equation*}
+Заметим, что первые два собственных вектора линейно зависимы и соответствуют нулевым собственным числам. Можем сделать вывод,
+что первая компонента вектора состояния не влияет на динамику системы (от координаты тележки не зависят другие параметры и их производные).
+
+Имея кратные нулевые корни, а также положительное собственное число, система является неустойчивой. Проведем анализ на управляемость, стабилизируемость, наблюдаемость и обнаруживаемость приведя систему в Жорданов базис:
+\begin{equation*}
+    A = PJP^{-1} = \begin{bmatrix}
+        1 & 0 & -0.03 & 0.03 \\
+        0 & 1 & 0.09 & 0.09 \\
+        0 & 0 & -0.31 & 0.31 \\
+        0 & 0 & 1 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 0 & 0 \\
+        0 & 0 & -3.28 & 0 \\
+        0 & 0 & 0 & 3.28
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 & 0 & -0.03 & 0.03 \\
+        0 & 1 & 0.09 & 0.09 \\
+        0 & 0 & -0.31 & 0.31 \\
+        0 & 0 & 1 & 1
+    \end{bmatrix}^{-1}
+\end{equation*}
+\begin{equation*}
+    P^{-1}B = \begin{bmatrix}
+        0 \\ 0.09 \\ 0.05 \\ 0.05
+    \end{bmatrix},
+    CP = \begin{bmatrix}
+        1 & 0 & -0.03 & 0.03 \\
+        0 & 0 & -0.31 & 0.31
+    \end{bmatrix}
+\end{equation*}
+Можем сделать вывод, что система является полностью управляемой и наблюдаемой (соответственно стабилизируемой и обнаруживаемой).
+
+\subsection{Передаточные функции}
+Найдем передаточные матрицы системы от входа к выходу и от внешнего возмущения к выходу:
+\begin{equation*}
+    \underset{u\to y}{W}(s) = \begin{bmatrix}
+        \frac{0.1s^2 - 0.98}{s^4 - 10.78s^2} \\
+        \frac{0.1}{s^2 - 10.78}
+    \end{bmatrix}, 
+    \underset{f\to y}{W}(s) = \begin{bmatrix}
+        \frac{0.1}{s^2 - 10.78} \\
+        \frac{1.1}{s^2 - 10.78}
+    \end{bmatrix}
+\end{equation*}
+Динамический порядок функции $\frac{0.1s^2 - 0.98}{s^4 - 10.78s^2}$ равен $4$, для остальных -- $2$. Относительный динамический порядок всех функций равен $2$.
+Нули присутствуют только у функции $\frac{0.1s^2 - 0.98}{s^4 - 10.78s^2}$ и равны $\pm 3.13$. Полюса передаточных функций соответствуют собственным числам матрицы динамики системы.
+
+Все функции описывают расходящийся переходный процесс при нулевом входном (внешнем) воздействии, т.к. имеют кратные нулевые или положительный полюса.
+
+\subsection{Линейное моделирование}
+Выполним моделирование линеаризованной системы, заданной уравнениями \ref{eq:11}.
+Ниже приведены графики, демонстрирующие динамику вектора состояния при различных начальных условиях.
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_1.png}
+    \caption{\label{fig:task2_3_1}Моделирование линеаризованной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0.05 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_2.png}
+    \caption{\label{fig:task2_3_2}Моделирование линеаризованной системы ($x(0)=\begin{bmatrix}
+        0 & 0.1 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_3.png}
+    \caption{\label{fig:task2_3_3}Моделирование линеаризованной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0.2
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_4.png}
+    \caption{\label{fig:task2_3_4}Моделирование линеаризованной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\subsection{Нелинейное моделирование}
+Выполним моделирование исходной системы, заданной уравнениями \ref{eq:7}.
+Ниже приведены графики, демонстрирующие динамику вектора состояния при различных начальных условиях.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=300px]{state_nonlin_1.png}
+    \caption{\label{fig:task2_4_1}Моделирование исходной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0.05 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_nonlin_2.png}
+    \caption{\label{fig:task2_4_2}Моделирование исходной системы ($x(0)=\begin{bmatrix}
+        0 & 0.1 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_nonlin_3.png}
+    \caption{\label{fig:task2_4_3}Моделирование исходной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0.2
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_nonlin_4.png}
+    \caption{\label{fig:task2_4_4}Моделирование исходной системы ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+\pagebreak
+Заметим, что при малом времени моделирования динамика систем очень схожая. Построим сравнительные графики при большем времени переходного процесса.
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_nonlin_1.png}
+    \caption{\label{fig:task2_4_5}Сравнительное моделирование систем ($x(0)=\begin{bmatrix}
+        0 & 0 & 0.05 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_nonlin_2.png}
+    \caption{\label{fig:task2_4_6}Сравнительное моделирование систем ($x(0)=\begin{bmatrix}
+        0 & 0.1 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_nonlin_3.png}
+    \caption{\label{fig:task2_4_7}Сравнительное моделирование систем ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0.2
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=300px]{state_lin_nonlin_4.png}
+    \caption{\label{fig:task2_4_8}Сравнительное моделирование систем ($x(0)=\begin{bmatrix}
+        0 & 0 & 0 & 0
+    \end{bmatrix}^T$).}
+\end{figure}
+
+\pagebreak
+При увеличении времени моделирования расхождения становятся явно заметными.
+
+\section{Модальное управление}
